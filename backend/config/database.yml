@@ -1,0 +1,58 @@
+# PostgreSQL. Versions 9.3 and up are supported.
+#
+# Install the pg driver:
+#   gem install pg
+# On macOS with Homebrew:
+#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
+# On Windows:
+#   gem install pg
+#       Choose the win32 build.
+#       Install PostgreSQL and put its /bin directory on your path.
+#
+# Configure Using Gemfile
+# gem "pg"
+#
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: localhost
+  port: 5432
+  username: emedicine_user
+  password: asdqwe123
+
+development:
+  <<: *default
+  database: boats_reservation_development
+
+test:
+  <<: *default
+  database: boats_reservation_test
+
+production:
+  # Definición de la conexión primaria, usando DATABASE_URL
+  primary: &primary_production
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    url: <%= ENV['DATABASE_URL'] %> # Apunta aquí a tu RDS
+
+  # Conexión para Active Record Cache Store (Solid Cache)
+  # Hereda de primary_production, apuntando a la misma DB de RDS
+  cache:
+    <<: *primary_production
+    migrations_paths: db/solid_cache_migrate # Esto asegura que use su propio esquema
+
+  # Conexión para Active Job (Solid Queue)
+  # Hereda de primary_production, apuntando a la misma DB de RDS
+  queue:
+    <<: *primary_production
+    migrations_paths: db/solid_queue_migrate # Esto asegura que use su propio esquema
+
+  # Conexión para Action Cable (Solid Cable)
+  # Hereda de primary_production, apuntando a la misma DB de RDS
+  cable:
+    <<: *primary_production
+    migrations_paths: db/solid_cable_migrate # Esto
