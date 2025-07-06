@@ -4,8 +4,7 @@ const API_BASE_URL = 'http://127.0.0.1:3001/api/v1';
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
-  const token = localStorage.getItem('authToken'); // Corregido: usar 'authToken' en lugar de 'token'
-  console.log('Token found:', token ? 'Yes' : 'No'); // Debug log
+  const token = localStorage.getItem('authToken');
   return {
     'Content-Type': 'application/json',
     'Authorization': token ? `Bearer ${token}` : '',
@@ -70,27 +69,18 @@ export const getOwnerReservations = createAsyncThunk(
   'reservations/getOwnerReservations',
   async (_, { rejectWithValue }) => {
     try {
-      console.log('getOwnerReservations - Making request to:', `${API_BASE_URL}/reservations/owner_reservations`);
-      const headers = getAuthHeaders();
-      console.log('getOwnerReservations - Headers:', headers);
-      
       const response = await fetch(`${API_BASE_URL}/reservations/owner_reservations`, {
-        headers: headers,
+        headers: getAuthHeaders(),
       });
-      
-      console.log('getOwnerReservations - Response status:', response.status);
       
       if (!response.ok) {
         const data = await response.json();
-        console.log('getOwnerReservations - Error response:', data);
         return rejectWithValue(data.status?.message || 'Failed to fetch owner reservations');
       }
       
       const data = await response.json();
-      console.log('getOwnerReservations - Success response:', data);
       return data.status?.data || data;
     } catch (error) {
-      console.log('getOwnerReservations - Exception:', error);
       return rejectWithValue(error.message);
     }
   }

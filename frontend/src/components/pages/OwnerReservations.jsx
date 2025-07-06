@@ -21,15 +21,8 @@ function OwnerReservations() {
   
   const [filter, setFilter] = useState('pending');
 
-  // Debug logging
-  console.log('OwnerReservations - User:', user);
-  console.log('OwnerReservations - User role:', user?.role);
-  console.log('OwnerReservations - Reservations:', reservations);
-  console.log('OwnerReservations - Error:', error);
-
   useEffect(() => {
     if (user && (user.role === 'owner' || user.role === 'admin')) {
-      console.log('OwnerReservations - Dispatching getOwnerReservations');
       dispatch(getOwnerReservations());
     }
   }, [dispatch, user]);
