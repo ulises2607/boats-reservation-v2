@@ -16,7 +16,9 @@ import BoatDetails from "./components/pages/BoatDetails";
 import AddBoat from "./components/pages/AddBoat";
 import DeleteBoat from "./components/pages/DeleteBoat";
 import Reserve from "./components/pages/Reserve";
+import ReservationProcess from "./components/pages/ReservationProcess";
 import MyReservations from "./components/pages/MyReservations";
+import OwnerReservations from "./components/pages/OwnerReservations";
 import AdminDashboard from "./components/pages/AdminDashboard";
 import AdminUsers from "./components/pages/AdminUsers";
 import AdminBoats from "./components/pages/AdminBoats";
@@ -42,17 +44,22 @@ function App() {
               <Route path="profile" element={<RequireAuth><UserProfile /></RequireAuth>} />
               <Route path="boats" element={<RequireAuth><Boats /></RequireAuth>} />
               <Route path="boats/:id" element={<RequireAuth><BoatDetails /></RequireAuth>} />
-              <Route path="reserve/:id" element={<RequireAuth><Reserve /></RequireAuth>} />
+              
+              {/* Rutas de reservas */}
+              <Route path="reserve" element={<RequireAuth><Reserve /></RequireAuth>} />
+              <Route path="reserve/:boatId" element={<RequireAuth><ReservationProcess /></RequireAuth>} />
               <Route path="my-reservations" element={<RequireAuth><MyReservations /></RequireAuth>} />
               
               {/* Rutas solo para propietarios */}
               <Route path="add-boat" element={<OwnerOnly><AddBoat /></OwnerOnly>} />
               <Route path="delete-boat" element={<OwnerOnly><DeleteBoat /></OwnerOnly>} />
+              <Route path="owner/reservations" element={<OwnerOnly><OwnerReservations /></OwnerOnly>} />
               
               {/* Rutas solo para administradores */}
               <Route path="admin" element={<AdminOnly><AdminDashboard /></AdminOnly>} />
               <Route path="admin/users" element={<AdminOnly><AdminUsers /></AdminOnly>} />
               <Route path="admin/boats" element={<AdminOnly><AdminBoats /></AdminOnly>} />
+              <Route path="admin/reservations" element={<AdminOnly><OwnerReservations /></AdminOnly>} />
             </Route>
           </Routes>
         </Router>

@@ -47,7 +47,8 @@ const Header = () => {
       if (user.role === 'owner' || user.role === 'admin') {
         authenticatedLinks.push(
           { path: "/add-boat", text: "Add Boat" },
-          { path: "/delete-boat", text: "Manage Boats" }
+          { path: "/delete-boat", text: "Manage Boats" },
+          { path: "/owner/reservations", text: "Manage Reservations" }
         );
       }
 

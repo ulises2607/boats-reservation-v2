@@ -17,11 +17,16 @@ class ApplicationController < ActionController::API
     
     if header
       begin
-        decoded = JWT.decode(header, ENV['DEVISE_JWT_SECRET_KEY'])
+        # Usar ENV en lugar de credentials para la clave JWT
+        secret_key = ENV['DEVISE_JWT_SECRET_KEY'] || Rails.application.credentials.devise_jwt_secret_key
+        decoded = JWT.decode(header, secret_key)
         @current_user = User.find(decoded[0]['sub'])
-      rescue JWT::DecodeError => e
+      rescue JWT::DecodeError, ActiveRecord::RecordNotFound => e
+        Rails.logger.error "JWT Authentication failed: #{e.message}"
         @current_user = nil
       end
+    else
+      @current_user = nil
     end
   end
 
