@@ -13,7 +13,7 @@ const Signup = () => {
     email: '',
     password: '',
     password_confirmation: '',
-    role: 'rented',
+    role: 'renter',
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -198,7 +198,7 @@ const Signup = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               >
-                <option value="rented">Renter (I want to rent boats)</option>
+                <option value="renter">Renter (I want to rent boats)</option>
                 <option value="owner">Owner (I want to list my boats)</option>
               </select>
             </div>

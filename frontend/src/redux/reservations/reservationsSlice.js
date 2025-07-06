@@ -4,7 +4,8 @@ const API_BASE_URL = 'http://127.0.0.1:3001/api/v1';
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('authToken'); // Corregido: usar 'authToken' en lugar de 'token'
+  console.log('Token found:', token ? 'Yes' : 'No'); // Debug log
   return {
     'Content-Type': 'application/json',
     'Authorization': token ? `Bearer ${token}` : '',
@@ -47,16 +48,17 @@ export const getUserReservations = createAsyncThunk(
   'reservations/getUserReservations',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/reservations/my_reservations`, {
+      const response = await fetch(`${API_BASE_URL}/reservations`, {
         headers: getAuthHeaders(),
       });
       
       if (!response.ok) {
         const data = await response.json();
-        return rejectWithValue(data.error || 'Failed to fetch user reservations');
+        return rejectWithValue(data.status?.message || 'Failed to fetch user reservations');
       }
       
-      return await response.json();
+      const data = await response.json();
+      return data.status?.data || data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -74,10 +76,11 @@ export const getOwnerReservations = createAsyncThunk(
       
       if (!response.ok) {
         const data = await response.json();
-        return rejectWithValue(data.error || 'Failed to fetch owner reservations');
+        return rejectWithValue(data.status?.message || 'Failed to fetch owner reservations');
       }
       
-      return await response.json();
+      const data = await response.json();
+      return data.status?.data || data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -92,15 +95,19 @@ export const createReservation = createAsyncThunk(
       const response = await fetch(`${API_BASE_URL}/reservations`, {
         method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify({ reservation: reservationData }),
+        body: JSON.stringify({ 
+          reservation: reservationData,
+          boat_id: reservationData.boat_id 
+        }),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        return rejectWithValue(data.errors || data.error || 'Failed to create reservation');
+        return rejectWithValue(data.status?.message || data.errors || data.error || 'Failed to create reservation');
       }
 
-      return await response.json();
+      const result = await response.json();
+      return result.status?.data || result;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -173,10 +180,11 @@ export const checkAvailability = createAsyncThunk(
 
       if (!response.ok) {
         const data = await response.json();
-        return rejectWithValue(data.error || 'Failed to check availability');
+        return rejectWithValue(data.status?.message || 'Failed to check availability');
       }
 
-      return await response.json();
+      const data = await response.json();
+      return data.status?.data || data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
