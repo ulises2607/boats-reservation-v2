@@ -15,7 +15,7 @@ const Header = () => {
 
   // Links para landing page (simplificados)
   const landingLinks = [
-    { path: '/boats', text: 'Explorar Botes' },
+    { path: '/explore', text: 'Explorar Botes' },
     ...(user ? [
       { path: '/my-reservations', text: 'Mis Reservas' }
     ] : [
@@ -26,6 +26,7 @@ const Header = () => {
 
   // Links completos para páginas internas
   const fullLinks = [
+    { path: '/explore', text: 'Explore' },
     { path: '/boats', text: 'Boats' },
     { path: '/reserve', text: 'Reserve' },
     { path: '/my-reservations', text: 'My Reservations' },

@@ -5,6 +5,16 @@ import store from './redux/store';
 import './index.css';
 import App from './App';
 
+// Clean up any existing service workers
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
+      console.log('Unregistered service worker:', registration);
+    }
+  });
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

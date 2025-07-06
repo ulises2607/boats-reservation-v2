@@ -46,7 +46,7 @@ function LandingPage() {
                 />
               </div>
               <Link 
-                to="/boats"
+                to="/explore"
                 className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center transition-colors"
               >
                 <FiSearch className="mr-2" />
@@ -194,7 +194,7 @@ function LandingPage() {
               Comenzar Ahora
             </Link>
             <Link 
-              to="/boats"
+              to="/explore"
               className="border border-white hover:bg-white hover:text-gray-900 text-white font-semibold py-4 px-8 rounded-lg transition-colors"
             >
               Explorar Botes

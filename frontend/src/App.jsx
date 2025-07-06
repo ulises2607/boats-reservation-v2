@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import Layout from './components/Layout';
 import LandingPage from './components/pages/LandingPage';
+import ExplorePage from './components/pages/ExplorePage';
+import TestPage from './components/pages/TestPage';
 import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import Boats from './components/pages/Boats';
@@ -21,6 +23,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<LandingPage />} />
+            <Route path="explore" element={<ExplorePage />} />
+            <Route path="test" element={<TestPage />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
             <Route path="boats" element={<Boats />} />

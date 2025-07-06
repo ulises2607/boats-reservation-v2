@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import usersessionReducer from './usersession/usersessionsSlice';
-import reservationsReducer from './reservations/reservationsSlice';
-import boatsReducer from './boats/boatsSlice';
-import boatDetailsReducer from './boatDetails/boatDetailsSlice';
+import usersessionReducer from './usersession/usersessionsSlice.js';
+import reservationsReducer from './reservations/reservationsSlice.js';
+import boatsReducer from './boats/boatsSlice.js';
+import boatDetailsReducer from './boatDetails/boatDetailsSlice.js';
 
 const store = configureStore({
   reducer: {

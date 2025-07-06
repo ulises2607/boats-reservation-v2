@@ -7,8 +7,9 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    # Para desarrollo, permite el acceso desde tu frontend React en localhost:3000
-    origins 'http://localhost:3000'
+    # Para desarrollo, permite el acceso desde tu frontend React
+    # Puerto 3000 para Create React App y puerto 5173 para Vite
+    origins 'http://localhost:3000', 'http://localhost:5173'
 
     resource '*',
       headers: :any,
