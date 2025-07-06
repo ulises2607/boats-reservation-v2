@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import {
   FaTwitter, FaFacebook, FaGooglePlus, FaVimeoV, FaPinterest,
 } from 'react-icons/fa';
@@ -10,7 +10,22 @@ import boatLogo from '../Assets/Images/logo/boat-logo-3.png';
 
 const Header = () => {
   const user = useSelector(selectUser);
-  const links = [
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
+  // Links para landing page (simplificados)
+  const landingLinks = [
+    { path: '/boats', text: 'Explorar Botes' },
+    ...(user ? [
+      { path: '/my-reservations', text: 'Mis Reservas' }
+    ] : [
+      { path: '/login', text: 'Iniciar Sesión' },
+      { path: '/signup', text: 'Registrarse' }
+    ]),
+  ];
+
+  // Links completos para páginas internas
+  const fullLinks = [
     { path: '/boats', text: 'Boats' },
     { path: '/reserve', text: 'Reserve' },
     { path: '/my-reservations', text: 'My Reservations' },
@@ -19,8 +34,103 @@ const Header = () => {
     ...(user ? [] : [{ path: '/login', text: 'Login' }, { path: '/signup', text: 'Sign up' }]),
   ];
 
+  const links = isLandingPage ? landingLinks : fullLinks;
+
   const [isOpen, setIsOpen] = useState(false);
 
+  // Navbar horizontal para landing page
+  if (isLandingPage) {
+    return (
+      <header className="px-4 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Logo */}
+          <NavLink to="/" className="flex items-center">
+            <img src={boatLogo} alt="Boats Logo" className="h-12 w-auto" />
+            <span className="ml-2 text-xl font-bold text-blue-600">BoatRental</span>
+          </NavLink>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            {links.map(({ path, text }) => (
+              <NavLink
+                key={text}
+                to={path}
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                {text}
+              </NavLink>
+            ))}
+            {user && (
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-700">Hola, {user.name}</span>
+                <Logout />
+              </div>
+            )}
+          </nav>
+
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            className="md:hidden p-2"
+            aria-label="Open menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+
+          {/* Mobile menu */}
+          <nav
+            className={`md:hidden fixed top-0 left-0 w-full h-full bg-white z-50 transform transition-transform duration-300 ease-in-out ${
+              isOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
+          >
+            <div className="flex justify-between items-center p-4 border-b">
+              <div className="flex items-center">
+                <img src={boatLogo} alt="Boats Logo" className="h-10 w-auto" />
+                <span className="ml-2 text-lg font-bold text-blue-600">BoatRental</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="p-2"
+                aria-label="Close menu"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <ul className="py-4">
+              {links.map(({ path, text }) => (
+                <li key={text}>
+                  <NavLink
+                    to={path}
+                    onClick={() => setIsOpen(false)}
+                    className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  >
+                    {text}
+                  </NavLink>
+                </li>
+              ))}
+              {user && (
+                <li className="px-4 py-3 border-t">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-700">Hola, {user.name}</span>
+                    <Logout />
+                  </div>
+                </li>
+              )}
+            </ul>
+          </nav>
+        </div>
+      </header>
+    );
+  }
+
+  // Layout original (sidebar) para páginas internas
   return (
     <header className="p-4 h-full border-b border-slate-300">
       {/* Mobile */}
