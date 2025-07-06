@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import Layout from "./components/Layout";
 import AuthChecker from "./components/AuthChecker";
-import { RequireAuth, GuestOnly, OwnerOnly } from "./components/PrivateRoute";
+import { RequireAuth, GuestOnly, OwnerOnly, AdminOnly } from "./components/PrivateRoute";
 import LandingPage from "./components/pages/LandingPage";
 import ExplorePage from "./components/pages/ExplorePage";
 import TestPage from "./components/pages/TestPage";
@@ -17,6 +17,9 @@ import AddBoat from "./components/pages/AddBoat";
 import DeleteBoat from "./components/pages/DeleteBoat";
 import Reserve from "./components/pages/Reserve";
 import MyReservations from "./components/pages/MyReservations";
+import AdminDashboard from "./components/pages/AdminDashboard";
+import AdminUsers from "./components/pages/AdminUsers";
+import AdminBoats from "./components/pages/AdminBoats";
 import "./index.css";
 
 function App() {
@@ -45,6 +48,11 @@ function App() {
               {/* Rutas solo para propietarios */}
               <Route path="add-boat" element={<OwnerOnly><AddBoat /></OwnerOnly>} />
               <Route path="delete-boat" element={<OwnerOnly><DeleteBoat /></OwnerOnly>} />
+              
+              {/* Rutas solo para administradores */}
+              <Route path="admin" element={<AdminOnly><AdminDashboard /></AdminOnly>} />
+              <Route path="admin/users" element={<AdminOnly><AdminUsers /></AdminOnly>} />
+              <Route path="admin/boats" element={<AdminOnly><AdminBoats /></AdminOnly>} />
             </Route>
           </Routes>
         </Router>

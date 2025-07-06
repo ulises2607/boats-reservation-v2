@@ -23,6 +23,14 @@ Rails.application.routes.draw do
       resources :users
       resources :boats
       resources :reservations
+      
+      # Admin routes
+      get 'admin/dashboard', to: 'admin#dashboard'
+      get 'admin/users', to: 'admin#users'
+      put 'admin/users/:id', to: 'admin#update_user'
+      delete 'admin/users/:id', to: 'admin#delete_user'
+      get 'admin/boats', to: 'admin#boats'
+      delete 'admin/boats/:id', to: 'admin#delete_boat'
     end
   end
   # Defines the root path route ("/")
