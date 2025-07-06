@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import { selectUser } from '../../redux/usersession/usersessionsSlice';
+import { selectUser } from '../../redux/auth/authSlice'; // Corregido: usar authSlice
 import { 
   getUserReservations,
   cancelReservation,
@@ -213,12 +213,16 @@ function MyReservations() {
                       
                       <div>
                         <p className="text-sm text-gray-600">Total Amount</p>
-                        <p className="font-medium text-lg">${reservation.total_amount}</p>
+                        <p className="font-medium text-lg">
+                          ${parseFloat(reservation.total_amount) || 'N/A'}
+                        </p>
                       </div>
                       
                       <div>
                         <p className="text-sm text-gray-600">Daily Rate</p>
-                        <p className="font-medium">${reservation.daily_rate}/day</p>
+                        <p className="font-medium">
+                          ${parseFloat(reservation.daily_rate) || 'N/A'}/day
+                        </p>
                       </div>
 
                       {reservation.notes && (
@@ -249,7 +253,7 @@ function MyReservations() {
                     )}
                     
                     <a
-                      href={`/boats/${reservation.boat_id}`}
+                      href={`/boats/${reservation.boat?.id || reservation.boat_id}`}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                     >
                       View Boat

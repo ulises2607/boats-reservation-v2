@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { selectUser } from '../../redux/usersession/usersessionsSlice';
+import { selectUser } from '../../redux/auth/authSlice'; // Corregido: usar authSlice
 import { 
   createReservation, 
   checkAvailability,
@@ -11,17 +11,20 @@ import {
   selectReservationsError,
   selectCurrentReservation
 } from '../../redux/reservations/reservationsSlice';
-import { fetchBoatById, selectBoatById } from '../../redux/boatDetails/boatDetailsSlice';
-import DateRangePicker from '../common/DateRangePicker';
+import { getBoatDetails } from '../../redux/boatDetails/boatDetailsSlice';
 import LoadingSpinner from '../common/LoadingSpinner';
 
 function ReservationProcess() {
-  const { boatId } = useParams();
+  const { boatId, id } = useParams(); // Puede venir como boatId o id dependiendo de la ruta
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
+  // El ID del bote puede venir como boatId o id
+  const actualBoatId = boatId || id;
+  
   const user = useSelector(selectUser);
-  const boat = useSelector(selectBoatById);
+  const boatDetailsState = useSelector((state) => state.boatDetails);
+  const boat = boatDetailsState.boatDetails;
   const loading = useSelector(selectReservationsLoading);
   const error = useSelector(selectReservationsError);
   const currentReservation = useSelector(selectCurrentReservation);
@@ -50,10 +53,10 @@ function ReservationProcess() {
 
   // Fetch boat details
   useEffect(() => {
-    if (boatId) {
-      dispatch(fetchBoatById(boatId));
+    if (actualBoatId) {
+      dispatch(getBoatDetails(actualBoatId));
     }
-  }, [dispatch, boatId]);
+  }, [dispatch, actualBoatId]);
 
   // Clear errors when component mounts
   useEffect(() => {
@@ -98,7 +101,7 @@ function ReservationProcess() {
 
     try {
       const result = await dispatch(checkAvailability({
-        boatId,
+        boatId: actualBoatId,
         startDate: formData.startDate,
         endDate: formData.endDate,
       })).unwrap();
@@ -158,7 +161,7 @@ function ReservationProcess() {
   const handleSubmitReservation = async () => {
     try {
       const reservationData = {
-        boat_id: parseInt(boatId),
+        boat_id: parseInt(actualBoatId),
         start_date: formData.startDate,
         end_date: formData.endDate,
         notes: formData.notes,

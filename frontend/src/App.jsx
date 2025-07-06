@@ -48,6 +48,7 @@ function App() {
               {/* Rutas de reservas */}
               <Route path="reserve" element={<RequireAuth><Reserve /></RequireAuth>} />
               <Route path="reserve/:boatId" element={<RequireAuth><ReservationProcess /></RequireAuth>} />
+              <Route path="boats/:id/reserve" element={<RequireAuth><ReservationProcess /></RequireAuth>} />
               <Route path="my-reservations" element={<RequireAuth><MyReservations /></RequireAuth>} />
               
               {/* Rutas solo para propietarios */}

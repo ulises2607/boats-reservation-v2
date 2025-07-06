@@ -22,7 +22,7 @@ const BoatDetails = () => {
       navigate('/login');
       return;
     }
-    navigate(`/reserve/${id}`);
+    navigate(`/boats/${id}/reserve`);
   };
 
   const isOwner = user && boat && boat.user_id === user.id;
