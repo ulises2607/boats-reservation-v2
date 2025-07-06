@@ -143,6 +143,49 @@ class Api::V1::BoatsController < ApplicationController
     render json: { status: 'error', message: 'Boat not found' }, status: :not_found
   end
 
+  # GET /api/v1/boats/:id/check_availability
+  # Verifica disponibilidad de un bote en fechas específicas
+  def check_availability
+    @boat = Boat.find(params[:id])
+    start_date = Date.parse(params[:start_date]) rescue nil
+    end_date = Date.parse(params[:end_date]) rescue nil
+    
+    if start_date.nil? || end_date.nil?
+      render json: {
+        status: {
+          code: 400,
+          message: "Invalid dates provided."
+        }
+      }, status: :bad_request
+      return
+    end
+    
+    available = @boat.available_for_dates?(start_date, end_date)
+    total_amount = nil
+    
+    if available
+      duration = (end_date - start_date).to_i + 1
+      total_amount = duration * @boat.rent_price
+    end
+    
+    render json: {
+      status: {
+        code: 200,
+        message: "Availability checked successfully.",
+        data: {
+          available: available,
+          boat_id: @boat.id,
+          start_date: start_date,
+          end_date: end_date,
+          duration_days: available ? (end_date - start_date).to_i + 1 : nil,
+          daily_rate: @boat.rent_price,
+          total_amount: total_amount,
+          conflicting_reservations: available ? [] : @boat.booked_dates
+        }
+      }
+    }, status: :ok
+  end
+
   private
 
   def boat_params

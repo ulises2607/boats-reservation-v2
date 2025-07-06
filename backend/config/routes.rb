@@ -21,8 +21,21 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'current_user', to: 'current_user#show'
       resources :users
-      resources :boats
-      resources :reservations
+      resources :boats do
+        member do
+          get :check_availability
+        end
+      end
+      resources :reservations do
+        member do
+          patch :confirm
+          patch :cancel
+        end
+        collection do
+          get :owner_reservations
+          get :my_reservations
+        end
+      end
       
       # Admin routes
       get 'admin/dashboard', to: 'admin#dashboard'

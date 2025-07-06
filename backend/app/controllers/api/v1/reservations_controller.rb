@@ -26,6 +26,12 @@ class Api::V1::ReservationsController < ApplicationController
     }, status: :ok
   end
 
+  # GET /api/v1/reservations/my_reservations
+  # Lista las reservas del usuario actual (alias para index)
+  def my_reservations
+    index
+  end
+
   # GET /api/v1/reservations/owner
   # Lista las reservas de los botes del owner actual
   def owner_reservations
@@ -169,49 +175,6 @@ class Api::V1::ReservationsController < ApplicationController
     cancel
   end
 
-  # GET /api/v1/boats/:boat_id/availability
-  # Verifica disponibilidad de un bote en fechas específicas
-  def check_availability
-    @boat = Boat.find(params[:boat_id])
-    start_date = Date.parse(params[:start_date]) rescue nil
-    end_date = Date.parse(params[:end_date]) rescue nil
-    
-    if start_date.nil? || end_date.nil?
-      render json: {
-        status: {
-          code: 400,
-          message: "Invalid dates provided."
-        }
-      }, status: :bad_request
-      return
-    end
-    
-    available = @boat.available_for_dates?(start_date, end_date)
-    total_amount = nil
-    
-    if available
-      duration = (end_date - start_date).to_i + 1
-      total_amount = duration * @boat.rent_price
-    end
-    
-    render json: {
-      status: {
-        code: 200,
-        message: "Availability checked successfully.",
-        data: {
-          available: available,
-          boat_id: @boat.id,
-          start_date: start_date,
-          end_date: end_date,
-          duration_days: available ? (end_date - start_date).to_i + 1 : nil,
-          daily_rate: @boat.rent_price,
-          total_amount: total_amount,
-          conflicting_reservations: available ? [] : @boat.booked_dates
-        }
-      }
-    }, status: :ok
-  end
-
   private
 
   def set_reservation
@@ -287,6 +250,7 @@ class Api::V1::ReservationsController < ApplicationController
         location: reservation.boat.location,
         capacity: reservation.boat.capacity,
         boat_type: reservation.boat.boat_type,
+        picture: reservation.boat.picture,
         owner: {
           id: reservation.boat.user.id,
           name: reservation.boat.user.name,
