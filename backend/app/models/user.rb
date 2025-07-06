@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_many :boats, dependent: :destroy
   has_many :reservations
-  enum :role, { rented: 0, owner: 1, admin: 2 }
+  enum :role, { renter: 0, owner: 1, admin: 2 }
 
   include Devise::JWT::RevocationStrategies::JTIMatcher
 

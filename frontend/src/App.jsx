@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import Layout from "./components/Layout";
 import AuthChecker from "./components/AuthChecker";
+import { RequireAuth, GuestOnly, OwnerOnly } from "./components/PrivateRoute";
 import LandingPage from "./components/pages/LandingPage";
 import ExplorePage from "./components/pages/ExplorePage";
 import TestPage from "./components/pages/TestPage";
@@ -24,17 +25,24 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Layout />}>
+              {/* Rutas públicas */}
               <Route index element={<LandingPage />} />
               <Route path="explore" element={<ExplorePage />} />
               <Route path="test" element={<TestPage />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<Signup />} />
-              <Route path="boats" element={<Boats />} />
-              <Route path="boats/:id" element={<BoatDetails />} />
-              <Route path="add-boat" element={<AddBoat />} />
-              <Route path="delete-boat" element={<DeleteBoat />} />
-              <Route path="reserve/:id" element={<Reserve />} />
-              <Route path="my-reservations" element={<MyReservations />} />
+              
+              {/* Rutas solo para invitados (no autenticados) */}
+              <Route path="login" element={<GuestOnly><Login /></GuestOnly>} />
+              <Route path="signup" element={<GuestOnly><Signup /></GuestOnly>} />
+              
+              {/* Rutas que requieren autenticación */}
+              <Route path="boats" element={<RequireAuth><Boats /></RequireAuth>} />
+              <Route path="boats/:id" element={<RequireAuth><BoatDetails /></RequireAuth>} />
+              <Route path="reserve/:id" element={<RequireAuth><Reserve /></RequireAuth>} />
+              <Route path="my-reservations" element={<RequireAuth><MyReservations /></RequireAuth>} />
+              
+              {/* Rutas solo para propietarios */}
+              <Route path="add-boat" element={<OwnerOnly><AddBoat /></OwnerOnly>} />
+              <Route path="delete-boat" element={<OwnerOnly><DeleteBoat /></OwnerOnly>} />
             </Route>
           </Routes>
         </Router>

@@ -29,23 +29,46 @@ const Header = () => {
         ]),
   ];
 
-  // Links completos para páginas internas
-  const fullLinks = [
-    { path: "/explore", text: "Explore" },
-    { path: "/boats", text: "Boats" },
-    { path: "/reserve", text: "Reserve" },
-    { path: "/my-reservations", text: "My Reservations" },
-    { path: "/add-boat", text: "Add Boat" },
-    { path: "/delete-boat", text: "Delete Boat" },
-    ...(user
-      ? []
-      : [
-          { path: "/login", text: "Login" },
-          { path: "/signup", text: "Sign up" },
-        ]),
-  ];
+  // Links condicionales según rol del usuario
+  const getRoleBasedLinks = () => {
+    const baseLinks = [
+      { path: "/explore", text: "Explore" },
+      { path: "/boats", text: "Boats" },
+    ];
 
-  const links = isLandingPage ? landingLinks : fullLinks;
+    if (user) {
+      // Links para usuarios autenticados
+      const authenticatedLinks = [
+        { path: "/my-reservations", text: "My Reservations" },
+      ];
+
+      // Links adicionales para propietarios
+      if (user.role === 'owner' || user.role === 'admin') {
+        authenticatedLinks.push(
+          { path: "/add-boat", text: "Add Boat" },
+          { path: "/delete-boat", text: "Manage Boats" }
+        );
+      }
+
+      // Links adicionales para administradores
+      if (user.role === 'admin') {
+        authenticatedLinks.push(
+          { path: "/admin", text: "Admin Panel" }
+        );
+      }
+
+      return [...baseLinks, ...authenticatedLinks];
+    } else {
+      // Links para usuarios no autenticados
+      return [
+        ...baseLinks,
+        { path: "/login", text: "Login" },
+        { path: "/signup", text: "Sign up" },
+      ];
+    }
+  };
+
+  const links = isLandingPage ? landingLinks : getRoleBasedLinks();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -153,7 +176,12 @@ const Header = () => {
               {user && (
                 <li className="px-4 py-3 border-t">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-700">Hola, {user.name}</span>
+                    <div>
+                      <span className="text-gray-700">Hola, {user.name}</span>
+                      <div className="text-xs text-gray-500 capitalize">
+                        {user.role_display || user.role}
+                      </div>
+                    </div>
                     <Logout />
                   </div>
                 </li>
@@ -241,8 +269,12 @@ const Header = () => {
             ))}
             {user && (
               <li className="text-center py-3">
-                Hi {user.name}
-                {" | "}
+                <div>
+                  Hi {user.name}
+                  <div className="text-sm text-gray-600 capitalize">
+                    {user.role_display || user.role}
+                  </div>
+                </div>
                 <Logout />
               </li>
             )}
