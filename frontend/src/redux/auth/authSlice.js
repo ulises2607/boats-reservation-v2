@@ -20,7 +20,7 @@ const removeToken = () => {
 // Async thunk for user registration
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
-  async ({ name, email, password, password_confirmation, role = 'rented' }, { rejectWithValue }) => {
+  async ({ name, email, password, password_confirmation, role = 'renter' }, { rejectWithValue }) => {
     try {
       const response = await fetch(`${API_BASE}/signup`, {
         method: 'POST',
