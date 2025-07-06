@@ -1,41 +1,63 @@
-# app/controllers/users/sessions_controller.rb
-
 class Users::SessionsController < Devise::SessionsController
-  # include RackSessionsFix # Si la comentaste, déjala comentada.
-
+  skip_before_action :authenticate_request, only: [:create, :destroy]
   respond_to :json
 
   def create
-    # Punto de depuración 1: antes de buscar al usuario
-    # binding.break
-
-    current_user = User.find_by(name: params[:user][:name])
-
-    # Punto de depuración 2: después de buscar al usuario
-    # binding.break
-
-    if current_user.present?
-      # Punto de depuración 3: antes de generar el token
-      # binding.break
-
-      token = JWT.encode({ sub: current_user.id, jti: current_user.jti }, ENV['DEVISE_JWT_SECRET_KEY'])
-
-      # Punto de depuración 4: después de generar el token
-      # binding.break
-
+    user = User.find_by(email: params[:user][:email])
+    
+    if user&.valid_password?(params[:user][:password])
+      token = JWT.encode({ sub: user.id, jti: user.jti }, ENV['DEVISE_JWT_SECRET_KEY'])
+      
       render json: {
         status: {
-          code: 200, message: 'Logged in successfully.',
-          data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes].merge(token:) }
+          code: 200, 
+          message: 'Logged in successfully.',
+          data: { 
+            user: UserSerializer.new(user).serializable_hash[:data][:attributes],
+            token: token
+          }
         }
       }, status: :ok
     else
-      # Punto de depuración 5: si el usuario no fue encontrado
-      # binding.break
-
       render json: {
-        status: { message: "User couldn't be found." }
-      }, status: :unprocessable_entity
+        status: { 
+          code: 401,
+          message: "Invalid email or password." 
+        }
+      }, status: :unauthorized
+    end
+  end
+
+  def destroy
+    if request.headers['Authorization'].present?
+      token = request.headers['Authorization'].split(' ').last
+      
+      begin
+        decoded_token = JWT.decode(token, ENV['DEVISE_JWT_SECRET_KEY'])
+        user = User.find(decoded_token[0]['sub'])
+        user.update(jti: SecureRandom.uuid)
+        
+        render json: {
+          status: {
+            code: 200,
+            message: 'Logged out successfully.'
+          }
+        }, status: :ok
+      rescue JWT::DecodeError
+        render json: {
+          status: {
+            code: 401,
+            message: 'Invalid token.'
+          }
+        }, status: :unauthorized
+      end
+    else
+      render json: {
+        status: {
+          code: 401,
+          message: 'Token not provided.'
+        }
+      }, status: :unauthorized
     end
   end
 end

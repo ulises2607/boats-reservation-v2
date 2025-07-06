@@ -1,4 +1,6 @@
 class Api::V1::BoatsController < ApplicationController
+  skip_before_action :authenticate_request, only: [:index, :show]
+  
   # GET /api/v1/boats
   def index
     boats = Boat.available.includes(:user)

@@ -1,6 +1,7 @@
 # Boats Reservation API Documentation
 
 ## Base URL
+
 ```
 http://localhost:3001/api/v1
 ```
@@ -8,11 +9,13 @@ http://localhost:3001/api/v1
 ## Boats API
 
 ### List all boats
+
 **GET** `/boats`
 
 Returns a paginated list of all boats with enhanced data.
 
 #### Query Parameters
+
 - `page` (optional): Page number for pagination (default: 1)
 - `per_page` (optional): Number of items per page (default: 20, max: 100)
 - `boat_type` (optional): Filter by boat type
@@ -29,6 +32,7 @@ Returns a paginated list of all boats with enhanced data.
 - `sort_direction` (optional): Sort direction (`asc` or `desc`, default: `asc`)
 
 #### Example Requests
+
 ```bash
 # Get all boats
 curl -X GET "http://localhost:3001/api/v1/boats"
@@ -50,6 +54,7 @@ curl -X GET "http://localhost:3001/api/v1/boats?boat_type=yacht&min_capacity=8&l
 ```
 
 #### Response Format
+
 ```json
 {
   "status": "success",
@@ -103,16 +108,19 @@ curl -X GET "http://localhost:3001/api/v1/boats?boat_type=yacht&min_capacity=8&l
 ```
 
 ### Get a specific boat
+
 **GET** `/boats/:id`
 
 Returns detailed information about a specific boat.
 
 #### Example Request
+
 ```bash
 curl -X GET "http://localhost:3001/api/v1/boats/1"
 ```
 
 ### Boat Types Available
+
 - `fishing` - Fishing boats
 - `yacht` - Luxury yachts
 - `sailboat` - Sailboats
@@ -123,7 +131,9 @@ curl -X GET "http://localhost:3001/api/v1/boats/1"
 - `speedboat` - Speedboats
 
 ### Enhanced Fields
+
 The API now includes these enhanced fields for each boat:
+
 - `boat_type`: Type of boat from predefined categories
 - `capacity`: Maximum number of people
 - `location`: Location where the boat is available
@@ -140,13 +150,16 @@ The API now includes these enhanced fields for each boat:
 - `amenities_list`: Parsed amenities array
 
 ### Error Handling
+
 All endpoints return appropriate HTTP status codes:
+
 - `200 OK`: Successful request
 - `404 Not Found`: Resource not found
 - `422 Unprocessable Entity`: Validation errors
 - `500 Internal Server Error`: Server errors
 
 Error responses follow this format:
+
 ```json
 {
   "status": "error",

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const TestPage = () => {
   const [boats, setBoats] = useState([]);
@@ -9,13 +9,13 @@ const TestPage = () => {
   useEffect(() => {
     const fetchBoats = async () => {
       try {
-        console.log('Testing API connection...');
-        const response = await axios.get('http://localhost:3001/api/v1/boats');
-        console.log('API Response:', response.data);
+        console.log("Testing API connection...");
+        const response = await axios.get("http://localhost:3001/api/v1/boats");
+        console.log("API Response:", response.data);
         setBoats(response.data.data || []);
         setError(null);
       } catch (err) {
-        console.error('API Error:', err);
+        console.error("API Error:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -40,7 +40,9 @@ const TestPage = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">API Test - Found {boats.length} boats</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        API Test - Found {boats.length} boats
+      </h1>
       <div className="grid gap-4">
         {boats.slice(0, 3).map((boat) => (
           <div key={boat.id} className="border p-4 rounded">

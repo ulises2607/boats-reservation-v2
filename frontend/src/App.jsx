@@ -1,20 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './redux/store';
-import Layout from './components/Layout';
-import LandingPage from './components/pages/LandingPage';
-import ExplorePage from './components/pages/ExplorePage';
-import TestPage from './components/pages/TestPage';
-import Login from './components/pages/Login';
-import Signup from './components/pages/Signup';
-import Boats from './components/pages/Boats';
-import BoatDetails from './components/pages/BoatDetails';
-import AddBoat from './components/pages/AddBoat';
-import DeleteBoat from './components/pages/DeleteBoat';
-import Reserve from './components/pages/Reserve';
-import MyReservations from './components/pages/MyReservations';
-import './index.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import Layout from "./components/Layout";
+import LandingPage from "./components/pages/LandingPage";
+import ExplorePage from "./components/pages/ExplorePage";
+import TestPage from "./components/pages/TestPage";
+import Login from "./components/pages/Login";
+import Signup from "./components/pages/Signup";
+import Boats from "./components/pages/Boats";
+import BoatDetails from "./components/pages/BoatDetails";
+import AddBoat from "./components/pages/AddBoat";
+import DeleteBoat from "./components/pages/DeleteBoat";
+import Reserve from "./components/pages/Reserve";
+import MyReservations from "./components/pages/MyReservations";
+import "./index.css";
 
 function App() {
   return (

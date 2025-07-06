@@ -1,17 +1,30 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  skip_before_action :authenticate_request, only: [:create]
+  respond_to :json
+
   def create
     @user = User.new(sign_up_params)
 
     if @user.save
+      token = JWT.encode({ sub: @user.id, jti: @user.jti }, ENV['DEVISE_JWT_SECRET_KEY'])
+      
       render json: {
         status: {
-          code: 200, message: 'Signed up successfully. Now please log in.',
-          data: { user: UserSerializer.new(@user).serializable_hash[:data][:attributes] }
+          code: 201, 
+          message: 'Signed up successfully.',
+          data: { 
+            user: UserSerializer.new(@user).serializable_hash[:data][:attributes],
+            token: token
+          }
         }
-      }, status: :ok
+      }, status: :created
     else
       render json: {
-        status: { message: "User couldn't be created successfully.", errors: @user.errors.full_messages }
+        status: { 
+          code: 422,
+          message: "User couldn't be created successfully.", 
+          errors: @user.errors.full_messages 
+        }
       }, status: :unprocessable_entity
     end
   end
@@ -19,6 +32,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def sign_up_params
-    params.require(:user).permit(:name)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role)
   end
 end

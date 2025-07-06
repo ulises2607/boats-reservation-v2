@@ -1,38 +1,47 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { NavLink, useLocation } from "react-router-dom";
 import {
-  FaTwitter, FaFacebook, FaGooglePlus, FaVimeoV, FaPinterest,
-} from 'react-icons/fa';
-import { selectUser } from '../redux/usersession/usersessionsSlice';
-import Logout from './Logout';
-import boatLogo from '../Assets/Images/logo/boat-logo-3.png';
+  FaTwitter,
+  FaFacebook,
+  FaGooglePlus,
+  FaVimeoV,
+  FaPinterest,
+} from "react-icons/fa";
+import { selectUser } from "../redux/usersession/usersessionsSlice";
+import Logout from "./Logout";
+import boatLogo from "../Assets/Images/logo/boat-logo-3.png";
 
 const Header = () => {
   const user = useSelector(selectUser);
   const location = useLocation();
-  const isLandingPage = location.pathname === '/';
+  const isLandingPage = location.pathname === "/";
 
   // Links para landing page (simplificados)
   const landingLinks = [
-    { path: '/explore', text: 'Explorar Botes' },
-    ...(user ? [
-      { path: '/my-reservations', text: 'Mis Reservas' }
-    ] : [
-      { path: '/login', text: 'Iniciar Sesión' },
-      { path: '/signup', text: 'Registrarse' }
-    ]),
+    { path: "/explore", text: "Explorar Botes" },
+    ...(user
+      ? [{ path: "/my-reservations", text: "Mis Reservas" }]
+      : [
+          { path: "/login", text: "Iniciar Sesión" },
+          { path: "/signup", text: "Registrarse" },
+        ]),
   ];
 
   // Links completos para páginas internas
   const fullLinks = [
-    { path: '/explore', text: 'Explore' },
-    { path: '/boats', text: 'Boats' },
-    { path: '/reserve', text: 'Reserve' },
-    { path: '/my-reservations', text: 'My Reservations' },
-    { path: '/add-boat', text: 'Add Boat' },
-    { path: '/delete-boat', text: 'Delete Boat' },
-    ...(user ? [] : [{ path: '/login', text: 'Login' }, { path: '/signup', text: 'Sign up' }]),
+    { path: "/explore", text: "Explore" },
+    { path: "/boats", text: "Boats" },
+    { path: "/reserve", text: "Reserve" },
+    { path: "/my-reservations", text: "My Reservations" },
+    { path: "/add-boat", text: "Add Boat" },
+    { path: "/delete-boat", text: "Delete Boat" },
+    ...(user
+      ? []
+      : [
+          { path: "/login", text: "Login" },
+          { path: "/signup", text: "Sign up" },
+        ]),
   ];
 
   const links = isLandingPage ? landingLinks : fullLinks;
@@ -47,7 +56,9 @@ const Header = () => {
           {/* Logo */}
           <NavLink to="/" className="flex items-center">
             <img src={boatLogo} alt="Boats Logo" className="h-12 w-auto" />
-            <span className="ml-2 text-xl font-bold text-blue-600">BoatRental</span>
+            <span className="ml-2 text-xl font-bold text-blue-600">
+              BoatRental
+            </span>
           </NavLink>
 
           {/* Desktop Navigation */}
@@ -76,21 +87,33 @@ const Header = () => {
             className="md:hidden p-2"
             aria-label="Open menu"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
 
           {/* Mobile menu */}
           <nav
             className={`md:hidden fixed top-0 left-0 w-full h-full bg-white z-50 transform transition-transform duration-300 ease-in-out ${
-              isOpen ? 'translate-x-0' : '-translate-x-full'
+              isOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >
             <div className="flex justify-between items-center p-4 border-b">
               <div className="flex items-center">
                 <img src={boatLogo} alt="Boats Logo" className="h-10 w-auto" />
-                <span className="ml-2 text-lg font-bold text-blue-600">BoatRental</span>
+                <span className="ml-2 text-lg font-bold text-blue-600">
+                  BoatRental
+                </span>
               </div>
               <button
                 type="button"
@@ -98,12 +121,22 @@ const Header = () => {
                 className="p-2"
                 aria-label="Close menu"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
-            
+
             <ul className="py-4">
               {links.map(({ path, text }) => (
                 <li key={text}>
@@ -164,7 +197,7 @@ const Header = () => {
 
         <nav
           className={`lg:hidden fixed top-0 left-0 w-full h-full bg-white transform transition-transform duration-200 ease-in-out p-4 flex flex-col justify-between ${
-            isOpen ? 'translate-x-0' : '-translate-x-full'
+            isOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="flex justify-between">
@@ -207,10 +240,8 @@ const Header = () => {
             ))}
             {user && (
               <li className="text-center py-3">
-                Hi
-                {' '}
-                {user.name}
-                {' | '}
+                Hi {user.name}
+                {" | "}
                 <Logout />
               </li>
             )}
@@ -279,11 +310,7 @@ const Header = () => {
             ))}
             {user && (
               <li className="text-center py-6">
-                Hi
-                {' '}
-                {user.name}
-                !
-                {' | '}
+                Hi {user.name}!{" | "}
                 <Logout />
               </li>
             )}
@@ -292,7 +319,12 @@ const Header = () => {
 
         <div>
           <div className="flex justify-center space-x-4 py-6">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter"
+            >
               <FaTwitter />
             </a>
             <a
