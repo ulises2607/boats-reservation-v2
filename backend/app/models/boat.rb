@@ -119,4 +119,53 @@ class Boat < ApplicationRecord
   def toggle_availability!
     update!(availability_status: !availability_status)
   end
+
+  # ===============================
+  # MÉTODOS PARA RESERVAS
+  # ===============================
+  
+  # Verifica si el bote está disponible en un rango de fechas
+  def available_for_dates?(start_date, end_date)
+    return false unless availability_status
+    
+    overlapping_reservations = reservations.active.where(
+      '(start_date <= ? AND end_date >= ?) OR (start_date <= ? AND end_date >= ?) OR (start_date >= ? AND end_date <= ?)',
+      start_date, start_date,
+      end_date, end_date,
+      start_date, end_date
+    )
+    
+    overlapping_reservations.empty?
+  end
+  
+  # Obtiene las fechas ocupadas del bote
+  def booked_dates
+    reservations.active.pluck(:start_date, :end_date)
+  end
+  
+  # Reservas pendientes que necesitan aprobación del owner
+  def pending_reservations
+    reservations.pending
+  end
+  
+  # Próximas reservas confirmadas
+  def upcoming_reservations
+    reservations.confirmed.upcoming
+  end
+  
+  # Calcula los ingresos totales del bote
+  def total_earnings
+    reservations.completed.sum(:total_amount) || 0
+  end
+  
+  # Calcula la tasa de ocupación (porcentaje de días reservados)
+  def occupancy_rate(days_back = 30)
+    total_days = days_back
+    booked_days = reservations.confirmed
+                             .where('start_date >= ?', days_back.days.ago)
+                             .sum { |r| r.duration_days }
+    
+    return 0 if total_days == 0
+    (booked_days.to_f / total_days * 100).round(2)
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_06_073339) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_06_174933) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,13 +47,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_06_073339) do
   end
 
   create_table "reservations", force: :cascade do |t|
-    t.string "username", null: false
-    t.string "city", null: false
-    t.string "date", null: false
     t.bigint "boat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", default: 1, null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.decimal "total_amount", precision: 10, scale: 2
+    t.decimal "daily_rate", precision: 8, scale: 2
+    t.string "status", default: "pending", null: false
+    t.text "notes"
+    t.text "owner_notes"
     t.index ["boat_id"], name: "index_reservations_on_boat_id"
+    t.index ["start_date", "end_date"], name: "index_reservations_on_start_date_and_end_date"
+    t.index ["status"], name: "index_reservations_on_status"
+    t.index ["user_id", "status"], name: "index_reservations_on_user_id_and_status"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -74,4 +83,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_06_073339) do
 
   add_foreign_key "boats", "users"
   add_foreign_key "reservations", "boats"
+  add_foreign_key "reservations", "users"
 end
