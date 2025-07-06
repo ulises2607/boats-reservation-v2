@@ -8,12 +8,13 @@ import {
   FaVimeoV,
   FaPinterest,
 } from "react-icons/fa";
-import { selectUser } from "../redux/usersession/usersessionsSlice";
+import { selectUser, selectIsAuthenticated } from "../redux/auth/authSlice.js";
 import Logout from "./Logout";
 import boatLogo from "../Assets/Images/logo/boat-logo-3.png";
 
 const Header = () => {
   const user = useSelector(selectUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const location = useLocation();
   const isLandingPage = location.pathname === "/";
 
