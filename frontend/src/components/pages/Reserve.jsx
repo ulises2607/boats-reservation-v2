@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../redux/usersession/usersessionsSlice';
+import { selectUser } from '../../redux/auth/authSlice';
 
 function Reserve() {
   const navigate = useNavigate();

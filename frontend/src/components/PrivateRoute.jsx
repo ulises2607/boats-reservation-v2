@@ -53,7 +53,7 @@ export const GuestOnly = ({ children }) => {
 
 // Componente específico para rutas de propietarios
 export const OwnerOnly = ({ children }) => (
-  <RequireAuth allowedRoles={['owner']}>
+  <RequireAuth allowedRoles={['owner', 'admin']}>
     {children}
   </RequireAuth>
 );

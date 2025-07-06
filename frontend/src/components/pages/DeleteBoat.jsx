@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteBoat, fetchBoats, selectAllBoats } from '../../redux/boats/boatsSlice';
-import { selectUser } from '../../redux/usersession/usersessionsSlice';
+import { selectUser } from '../../redux/auth/authSlice';
 
 function DeleteBoat() {
   const dispatch = useDispatch();

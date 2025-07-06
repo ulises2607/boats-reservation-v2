@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBoatDetails } from '../../redux/boatDetails/boatDetailsSlice';
-import { selectUser } from '../../redux/usersession/usersessionsSlice';
+import { selectUser } from '../../redux/auth/authSlice';
 
 const BoatDetails = () => {
   const boatDetailsState = useSelector((state) => state.boatDetails);

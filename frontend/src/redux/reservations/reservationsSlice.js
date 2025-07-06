@@ -70,18 +70,27 @@ export const getOwnerReservations = createAsyncThunk(
   'reservations/getOwnerReservations',
   async (_, { rejectWithValue }) => {
     try {
+      console.log('getOwnerReservations - Making request to:', `${API_BASE_URL}/reservations/owner_reservations`);
+      const headers = getAuthHeaders();
+      console.log('getOwnerReservations - Headers:', headers);
+      
       const response = await fetch(`${API_BASE_URL}/reservations/owner_reservations`, {
-        headers: getAuthHeaders(),
+        headers: headers,
       });
+      
+      console.log('getOwnerReservations - Response status:', response.status);
       
       if (!response.ok) {
         const data = await response.json();
+        console.log('getOwnerReservations - Error response:', data);
         return rejectWithValue(data.status?.message || 'Failed to fetch owner reservations');
       }
       
       const data = await response.json();
+      console.log('getOwnerReservations - Success response:', data);
       return data.status?.data || data;
     } catch (error) {
+      console.log('getOwnerReservations - Exception:', error);
       return rejectWithValue(error.message);
     }
   }

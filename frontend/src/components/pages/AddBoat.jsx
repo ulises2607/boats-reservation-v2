@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { createBoat } from '../../redux/boats/boatsSlice';
-import { selectUser } from '../../redux/usersession/usersessionsSlice';
+import { selectUser } from '../../redux/auth/authSlice';
 
 const AddBoat = () => {
   const dispatch = useDispatch();
