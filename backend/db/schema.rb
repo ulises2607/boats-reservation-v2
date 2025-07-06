@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_03_193833) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_06_055853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,6 +24,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_03_193833) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "picture"
+    t.string "boat_type", default: "motorboat", null: false
+    t.integer "capacity", default: 4, null: false
+    t.decimal "length", precision: 5, scale: 2
+    t.string "location"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.text "amenities"
+    t.integer "minimum_rental_hours", default: 4
+    t.decimal "hourly_rate", precision: 8, scale: 2
+    t.decimal "daily_rate", precision: 8, scale: 2
+    t.text "images"
+    t.decimal "rating_average", precision: 3, scale: 2, default: "0.0"
+    t.integer "total_reviews", default: 0
+    t.boolean "availability_status", default: true
+    t.index ["availability_status"], name: "index_boats_on_availability_status"
+    t.index ["boat_type"], name: "index_boats_on_boat_type"
+    t.index ["latitude", "longitude"], name: "index_boats_on_latitude_and_longitude"
+    t.index ["location"], name: "index_boats_on_location"
+    t.index ["rating_average"], name: "index_boats_on_rating_average"
     t.index ["user_id"], name: "index_boats_on_user_id"
   end
 
