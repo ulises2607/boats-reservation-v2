@@ -39,6 +39,7 @@ const Header = () => {
     if (user) {
       // Links para usuarios autenticados
       const authenticatedLinks = [
+        { path: "/profile", text: "My Profile" },
         { path: "/my-reservations", text: "My Reservations" },
       ];
 

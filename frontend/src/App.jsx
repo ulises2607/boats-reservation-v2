@@ -10,6 +10,7 @@ import ExplorePage from "./components/pages/ExplorePage";
 import TestPage from "./components/pages/TestPage";
 import Login from "./components/pages/Login";
 import Signup from "./components/pages/Signup";
+import UserProfile from "./components/pages/UserProfile";
 import Boats from "./components/pages/Boats";
 import BoatDetails from "./components/pages/BoatDetails";
 import AddBoat from "./components/pages/AddBoat";
@@ -35,6 +36,7 @@ function App() {
               <Route path="signup" element={<GuestOnly><Signup /></GuestOnly>} />
               
               {/* Rutas que requieren autenticación */}
+              <Route path="profile" element={<RequireAuth><UserProfile /></RequireAuth>} />
               <Route path="boats" element={<RequireAuth><Boats /></RequireAuth>} />
               <Route path="boats/:id" element={<RequireAuth><BoatDetails /></RequireAuth>} />
               <Route path="reserve/:id" element={<RequireAuth><Reserve /></RequireAuth>} />

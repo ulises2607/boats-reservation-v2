@@ -156,6 +156,41 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+// Async thunk for updating user profile
+export const updateUserProfile = createAsyncThunk(
+  'auth/updateUserProfile',
+  async ({ userId, userData }, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      
+      if (!token) {
+        return rejectWithValue('No token found');
+      }
+
+      const response = await fetch(`${API_BASE}/api/v1/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user: userData
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return rejectWithValue(data.status.errors?.[0] || data.status.message || 'Update failed');
+      }
+
+      return data.status.data.user;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -237,6 +272,20 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.error = null;
         state.isLoading = false;
+      })
+      // Update user profile
+      .addCase(updateUserProfile.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
